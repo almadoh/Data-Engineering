@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="static/css/map.css" rel="stylesheet"/>
+    <link href="static/css/svgMap.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+<div class="demo-container">
+{#    <h2>Top countries/influencers</h2>#}
+
+    <div id="svgMapGPD"></div>
+    <script src="static/javascript/svgMap.js"></script>
+
+    <script>
+        $.getJSON("/location", function (out) {
+            reading(out)
+        });
+
+        function reading(out) {
+            new svgMap({
+                targetElementID: 'svgMapGPD',
+                data: {
+                    data: {
+                        gdp: {
+                            name: 'Total Number of tweets',
+                            format: '{0} tweets',
+                            thousandSeparator: ','
+                        },
+                        change: {
+                            name: 'Top user',
+                            format: '{0} '
+                        },
+                        gdpAdjusted: {
+                            name: 'Number of Tweets',
+                            format: '{0} tweets',
+                            thousandSeparator: ',',
+                            thresholdMax: 60000,
+                            thresholdMin: 1000
+                        },
+                        changeAdjusted: {
+                            name: 'World country rank',
+                            format: '#{0}'
+                        }
+                    },
+                    applyData: 'gdpAdjusted',
+                    values: out
+                },
+                mouseWheelZoomEnabled: true,
+                mouseWheelZoomWithKey: true,
+
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>
